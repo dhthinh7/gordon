@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Similar Products</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <style>
+      :root {
+        --master-padding: 15px;
+        --max-width: calc(1198px + var(--master-padding));
+      }
+    </style>
+
+    <div
+      class=""
+      style="
+        max-width: calc(1198px + var(--master-padding));
+        padding: 0 var(--master-padding);
+        margin: 0 auto;
+        height: 500px;
+      "
+    >
+      <div style="margin-bottom: 30px">
+        <p class="section-title">Recently views</p>
+        <h2 class="section-title-sub">Similar Products</h2>
+      </div>
+
+      <div style="height: 100%; margin: 0 -13px">
+        <iframe
+          src="http://localhost:3000/product-similar"
+          width="100%"
+          height="100%"
+          allowfullscreen=""
+          loading="lazy"
+          style="border: 0"
+          referrerpolicy="unsafe-url"
+        >
+        </iframe>
+      </div>
+    </div>
+  </body>
+</html>

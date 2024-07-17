@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Detail</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <style>
+      :root {
+        --master-padding: 15px;
+        --max-width: calc(1198px + var(--master-padding));
+      }
+    </style>
+
+    <div
+      class=""
+      style="
+        max-width: calc(1198px + var(--master-padding));
+        padding: 0 var(--master-padding);
+        margin: 0 auto;
+      "
+    >
+      <div style="height: 100%">
+        <iframe
+          id="dynamic-iframe"
+          src="http://localhost:3000/product-detail"
+          width="100%"
+          height="2500px"
+          allowfullscreen=""
+          loading="lazy"
+          style="border: 0; overflow: hidden"
+          referrerpolicy="unsafe-url"
+          scrolling="no"
+        >
+        </iframe>
+      </div>
+    </div>
+
+    <script>
+      const ORIGIN_URL = "http://localhost:3000";
+
+      const iframeEle = document.getElementById("dynamic-iframe");
+
+      function sendCurrentURLToIframe(url) {
+        const message = {
+          type: "PARENT_URL_CHANGE",
+          params: {
+            url: url,
+          },
+        };
+
+        iframeEle.contentWindow.postMessage(
+          JSON.stringify(message),
+          ORIGIN_URL
+        );
+      }
+
+      window.addEventListener("message", (e) => {
+        if (e.origin !== ORIGIN_URL) return;
+
+        if (typeof e.data === "string") {
+          const data = JSON.parse(e.data);
+
+          if (data.type === "UPDATE_QUERY_PARAMS") {
+            const newParams = data.params;
+            const parentUrl = new URL(window.location.href);
+
+            // Update query parameters
+            Object.keys(newParams).forEach((key) => {
+              parentUrl.searchParams.set(key, newParams[key]);
+            });
+            // Update the URL in the parent window
+            window.history.pushState({}, "", parentUrl.toString());
+            sendCurrentURLToIframe(parentUrl.toString());
+          }
+
+          if (data.type === "UPDATE_IFRAME_HEIGHT") {
+            const newParams = data.params;
+            iframeEle.style.height = `${newParams.height}px`;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
